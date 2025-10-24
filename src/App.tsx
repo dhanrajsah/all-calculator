@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calculator, DollarSign, Ruler, Heart, Calendar } from 'lucide-react';
+import { Calculator, DollarSign, Ruler, Heart, Calendar, Mail, Facebook, Instagram } from 'lucide-react';
 import BasicCalculator from './components/BasicCalculator';
 import FinancialCalculators from './components/FinancialCalculators';
 import UnitConverter from './components/UnitConverter';
@@ -117,11 +117,46 @@ function App() {
               financial planning, unit conversions, health metrics, and date calculations. Perfect for students,
               engineers, accountants, and anyone needing quick, accurate calculations.
             </p>
-            <div className="flex flex-wrap justify-center gap-2 text-sm text-slate-500">
+            <div className="flex flex-wrap justify-center gap-2 text-sm text-slate-500 mb-6">
               <span className="bg-slate-100 px-3 py-1 rounded-full">Free Forever</span>
               <span className="bg-slate-100 px-3 py-1 rounded-full">No Registration</span>
               <span className="bg-slate-100 px-3 py-1 rounded-full">100% Accurate</span>
               <span className="bg-slate-100 px-3 py-1 rounded-full">Mobile Friendly</span>
+            </div>
+
+            <div className="border-t border-slate-200 pt-6 mt-6">
+              <h4 className="text-lg font-semibold text-slate-800 mb-3">Created By</h4>
+              <p className="text-xl font-bold text-blue-600 mb-4">Dhanraj Sah</p>
+
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a
+                  href="mailto:dhanrajsah03@gmail.com"
+                  className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors text-slate-700"
+                >
+                  <Mail size={18} />
+                  <span className="text-sm">dhanrajsah03@gmail.com</span>
+                </a>
+
+                <a
+                  href="https://www.facebook.com/dhanrajsah02"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-xl transition-colors text-white"
+                >
+                  <Facebook size={18} />
+                  <span className="text-sm">Facebook</span>
+                </a>
+
+                <a
+                  href="https://www.instagram.com/dhanraj.sah00"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 rounded-xl transition-colors text-white"
+                >
+                  <Instagram size={18} />
+                  <span className="text-sm">Instagram</span>
+                </a>
+              </div>
             </div>
           </div>
           <p className="text-slate-500 mt-6">
