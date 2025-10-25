@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ArrowLeftRight, Clock } from 'lucide-react';
 
-type ConversionCategory = 'length' | 'weight' | 'temperature' | 'volume' | 'area' | 'speed' | 'currency' | 'time';
+type ConversionCategory = 'length' | 'weight' | 'temperature' | 'volume' | 'area' | 'speed' | 'time';
 
 interface ConversionUnit {
   name: string;
@@ -60,18 +60,6 @@ const conversions: Record<ConversionCategory, Record<string, ConversionUnit>> = 
     kilometers_per_hour: { name: 'Kilometers/Hour', toBase: (v) => v / 3.6, fromBase: (v) => v * 3.6 },
     miles_per_hour: { name: 'Miles/Hour', toBase: (v) => v * 0.44704, fromBase: (v) => v / 0.44704 },
   },
-  currency: {
-    USD: { name: 'US Dollar', toBase: (v) => v, fromBase: (v) => v },
-    EUR: { name: 'Euro', toBase: (v) => v, fromBase: (v) => v },
-    GBP: { name: 'British Pound', toBase: (v) => v, fromBase: (v) => v },
-    JPY: { name: 'Japanese Yen', toBase: (v) => v, fromBase: (v) => v },
-    INR: { name: 'Indian Rupee', toBase: (v) => v, fromBase: (v) => v },
-    NPR: { name: 'Nepali Rupee', toBase: (v) => v, fromBase: (v) => v },
-    AUD: { name: 'Australian Dollar', toBase: (v) => v, fromBase: (v) => v },
-    CAD: { name: 'Canadian Dollar', toBase: (v) => v, fromBase: (v) => v },
-    CNY: { name: 'Chinese Yuan', toBase: (v) => v, fromBase: (v) => v },
-    CHF: { name: 'Swiss Franc', toBase: (v) => v, fromBase: (v) => v },
-  },
   time: {
     kathmandu: { name: 'Kathmandu (GMT+5:45)', toBase: (v) => v, fromBase: (v) => v },
     utc: { name: 'UTC/GMT', toBase: (v) => v, fromBase: (v) => v },
@@ -105,15 +93,8 @@ export default function UnitConverter() {
   const [toUnit, setToUnit] = useState('feet');
   const [fromValue, setFromValue] = useState('1');
   const [toValue, setToValue] = useState('');
-  const [exchangeRates, setExchangeRates] = useState<Record<string, number>>({});
-  const [loading, setLoading] = useState(false);
   const [currentKathmanduTime, setCurrentKathmanduTime] = useState('');
 
-  useEffect(() => {
-    if (category === 'currency') {
-      fetchExchangeRates();
-    }
-  }, [category]);
 
   useEffect(() => {
     const updateKathmanduTime = () => {
@@ -133,23 +114,6 @@ export default function UnitConverter() {
     return () => clearInterval(interval);
   }, []);
 
-  const fetchExchangeRates = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
-      const data = await response.json();
-      setExchangeRates(data.rates);
-    } catch (error) {
-      console.error('Failed to fetch exchange rates:', error);
-    }
-    setLoading(false);
-  };
-
-  const convertCurrency = (value: number, from: string, to: string): number => {
-    if (!exchangeRates[from] || !exchangeRates[to]) return 0;
-    const usdValue = value / exchangeRates[from];
-    return usdValue * exchangeRates[to];
-  };
 
   const convertTime = (timeStr: string, fromZone: string, toZone: string): string => {
     try {
@@ -192,14 +156,9 @@ export default function UnitConverter() {
       const result = convertTime(fromValue, fromUnit, toUnit);
       setToValue(result);
     } else if (!isNaN(value)) {
-      if (category === 'currency') {
-        const result = convertCurrency(value, fromUnit, toUnit);
-        setToValue(result.toFixed(2));
-      } else {
-        const baseValue = conversions[category][fromUnit].toBase(value);
-        const result = conversions[category][toUnit].fromBase(baseValue);
-        setToValue(result.toFixed(6));
-      }
+      const baseValue = conversions[category][fromUnit].toBase(value);
+      const result = conversions[category][toUnit].fromBase(baseValue);
+      setToValue(result.toFixed(6));
     }
   };
 
@@ -219,7 +178,7 @@ export default function UnitConverter() {
 
         <div className="mb-6">
           <label className="block text-sm font-semibold text-slate-700 mb-3">Category</label>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
             {(Object.keys(conversions) as ConversionCategory[]).map((cat) => (
               <button
                 key={cat}
@@ -309,19 +268,10 @@ export default function UnitConverter() {
 
         <button
           onClick={handleConvert}
-          disabled={loading}
-          className="w-full mt-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white font-semibold py-4 rounded-xl hover:scale-105 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full mt-6 bg-gradient-to-br from-blue-500 to-blue-600 text-white font-semibold py-4 rounded-xl hover:scale-105 transition-all shadow-lg"
         >
-          {loading ? 'Loading rates...' : 'Convert'}
+          Convert
         </button>
-
-        {category === 'currency' && (
-          <div className="mt-4 p-4 bg-blue-50 rounded-xl">
-            <p className="text-sm text-blue-900">
-              <strong>Note:</strong> Currency rates are fetched in real-time from exchangerate-api.com. Rates update automatically when you switch to currency converter.
-            </p>
-          </div>
-        )}
 
         {category === 'time' && (
           <div className="mt-4 p-4 bg-teal-50 rounded-xl">

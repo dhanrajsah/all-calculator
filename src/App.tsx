@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import { Calculator, DollarSign, Ruler, Heart, Calendar, Mail, Facebook, Instagram } from 'lucide-react';
+import { Calculator, DollarSign, Ruler, Heart, Calendar, Mail, Facebook, Instagram, Coins } from 'lucide-react';
 import BasicCalculator from './components/BasicCalculator';
 import FinancialCalculators from './components/FinancialCalculators';
 import UnitConverter from './components/UnitConverter';
 import HealthCalculators from './components/HealthCalculators';
 import DateCalculators from './components/DateCalculators';
+import CurrencyExchange from './components/CurrencyExchange';
 
-type Category = 'basic' | 'financial' | 'converter' | 'health' | 'date';
+type Category = 'basic' | 'financial' | 'converter' | 'health' | 'date' | 'currency';
 
 interface CategoryInfo {
   id: Category;
@@ -37,6 +38,13 @@ const categories: CategoryInfo[] = [
     icon: Ruler,
     description: 'Convert between different units',
     color: 'from-amber-500 to-orange-500',
+  },
+  {
+    id: 'currency',
+    name: 'Currency Exchange',
+    icon: Coins,
+    description: 'Real-time currency exchange rates',
+    color: 'from-teal-500 to-cyan-600',
   },
   {
     id: 'health',
@@ -104,6 +112,7 @@ function App() {
             {activeCategory === 'basic' && <BasicCalculator />}
             {activeCategory === 'financial' && <FinancialCalculators />}
             {activeCategory === 'converter' && <UnitConverter />}
+            {activeCategory === 'currency' && <CurrencyExchange />}
             {activeCategory === 'health' && <HealthCalculators />}
             {activeCategory === 'date' && <DateCalculators />}
           </div>
